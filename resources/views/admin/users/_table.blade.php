@@ -9,7 +9,9 @@
                         <th>Username</th>
                         <th>Email</th>
                         <th>Date registered</th>
-                        <th>Actions</th>
+                        @canany(['edit users', 'delete users'])
+                            <th>Actions</th>
+                        @endcanany
                     </tr>
                 </thead>
                 <tbody>
@@ -19,35 +21,42 @@
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->created_at->toFormattedDateString() }}</td>
-                            <td>
-                                <div class="d-flex justify-content-start">
-                                    <a href="{{ route('users.edit', $user->id) }}"
-                                        class="btn btn-success btn-sm mr-2">Edit</a>
+                            @canany(['edit users', 'delete users'])
+                                <td>
+                                    <div class="d-flex justify-content-start">
+                                        @can('edit users')
+                                            <a href="{{ route('users.edit', $user->id) }}"
+                                                class="btn btn-success btn-sm mr-2">
+                                                Edit
+                                            </a>
+                                        @endcan
 
-                                    <!-- Delete User Modal -->
-                                    <x-modals.confirmation
-                                        name="deleteUserModal{{ $user->id }}"
-                                        :url="route('users.destroy', $user->id)">
-                                        <x-slot name="title">
-                                            Delete <strong>{{ $user->name }}
-                                        </x-slot>
+                                        @can('delete users')
+                                            <!-- Delete User Modal -->
+                                            <x-modals.confirmation
+                                                name="deleteUserModal{{ $user->id }}"
+                                                :url="route('users.destroy', $user->id)">
+                                                <x-slot name="title">
+                                                    Delete <strong>{{ $user->name }}
+                                                </x-slot>
 
-                                        <x-slot name="body">
-                                            Are you sure to delete <strong>{{ $user->name }}</strong>
-                                            permanently?
-                                        </x-slot>
-                                    </x-modals.confirmation>
+                                                <x-slot name="body">
+                                                    Are you sure to delete <strong>{{ $user->name }}</strong>
+                                                    permanently?
+                                                </x-slot>
+                                            </x-modals.confirmation>
 
 
-                                    <button
-                                        class="btn btn-danger btn-sm"
-                                        data-toggle="modal"
-                                        data-target="#deleteUserModal{{ $user->id }}">
-                                        Delete
-                                    </button>
-
-                                </div>
-                            </td>
+                                            <button
+                                                class="btn btn-danger btn-sm"
+                                                data-toggle="modal"
+                                                data-target="#deleteUserModal{{ $user->id }}">
+                                                Delete
+                                            </button>
+                                        @endcan
+                                    </div>
+                                </td>
+                            @endcanany
                         </tr>
                     @empty
                         <tr>

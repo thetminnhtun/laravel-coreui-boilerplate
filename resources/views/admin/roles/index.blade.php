@@ -1,11 +1,12 @@
 <x-admin-layout>
-    @can('view users')
+    @can('view roles')
+
         @section('breadcrumb')
             <div class="c-subheader px-3">
                 <!-- Breadcrumb-->
                 <ol class="breadcrumb border-0 m-0">
                     <li class="breadcrumb-item">Home</li>
-                    <li class="breadcrumb-item active">User</li>
+                    <li class="breadcrumb-item active">Role</li>
                     <!-- Breadcrumb Menu-->
                 </ol>
             </div>
@@ -21,7 +22,7 @@
                             type="text"
                             name="search"
                             value="{{ request('search') }}"
-                            placeholder="Search user by name or email">
+                            placeholder="Search role">
                         <span class="input-group-append">
                             <button class="btn btn-secondary" type="submit">Search</button>
                         </span>
@@ -29,14 +30,14 @@
                 </form>
             </div>
 
-            <!-- Create User -->
-            @can('create users')
+            <!-- Create Role -->
+            @can('create roles')
                 <div class="col-md-4 text-right">
-                    <a href="{{ route('users.create') }}" class="btn btn-primary">Create User</a>
+                    <a href="{{ route('roles.create') }}" class="btn btn-primary">Create Role</a>
                 </div>
             @endcan
 
-            @include('admin.users._table')
+            @include('admin.roles._table')
         </div>
     @endcan
 </x-admin-layout>

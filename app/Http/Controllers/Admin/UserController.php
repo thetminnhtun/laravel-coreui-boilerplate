@@ -16,10 +16,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user = User::filter()->latest()->paginate(User::PAGINATION_LIMIT);
+        $this->authorize('view users');
 
         return view('admin.users.index', [
-            'users' => $user
+            'users' => User::filter()->latest()->paginate(User::PAGINATION_LIMIT)
         ]);
     }
 
@@ -30,6 +30,8 @@ class UserController extends Controller
      */
     public function create()
     {
+        $this->authorize('create users');
+
         return view('admin.users.create', [
             'user' => new User
         ]);
@@ -43,6 +45,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create users');
+
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
@@ -73,6 +77,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $this->authorize('edit users');
+
         return view('admin.users.edit', [
             'user' => $user
         ]);
@@ -87,6 +93,8 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $this->authorize('edit users');
+
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|' . Rule::unique('users')->ignore($user->id),
@@ -110,6 +118,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        $this->authorize('delete users');
+
         $user->delete();
 
         return redirect()->route('users.index');
